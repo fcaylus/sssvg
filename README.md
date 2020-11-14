@@ -3,7 +3,9 @@
 
 Optimize SVGs and create Super Slim SVGs ! (based on [svgo](https://github.com/svg/svgo))
 
-Applies 10 passes of SVGO (with agressive parameters)
+Applies 10 passes of SVGO (with agressive parameters), and can also crop your SVGs to their content !
+
+Note: The crop feature is based on [svg-autocrop](https://github.com/cncf/svg-autocrop) and requires a transparent or white background.
 
 ## How to use it ?
 
