@@ -1,6 +1,6 @@
 {
   "name": "sssvg",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Optimize SVGs and create Super Slim SVGs !",
   "main": "index.js",
   "bin": {
