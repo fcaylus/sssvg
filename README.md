@@ -1,4 +1,5 @@
 # Super Slim SVG (sssvg)
+[![npm version](https://img.shields.io/npm/v/sssvg?style=flat-square)](https://www.npmjs.com/package/sssvg)
 
 Optimize SVGs and create Super Slim SVGs ! (based on [svgo](https://github.com/svg/svgo))
 
