@@ -13,6 +13,7 @@ program
     .arguments('<input> <output>')
     .option('-d, --directory', 'Treat input as a directory and optimize all SVGs inside')
     .option('-r, --recursive', 'Explore input directory recursively. Requires -d or --directory')
+    .option('-c, --crop', 'Crop SVGs to its content, and change the view box accordingly')
     .description(packageJson.description, {
         input: 'Input SVG file',
         output: 'Output SVG file or directory (if it doesn\'t match *.svg)'
@@ -21,7 +22,7 @@ program
         const handleFile = async (fileName) => {
             console.log(`🔵  Optimize SVG ${fileName}`);
             const fileData = fs.readFileSync(fileName, 'utf8');
-            const svg = await optimizeSVG(fileName, fileData);
+            const svg = await optimizeSVG(fileName, fileData, { crop: !!cmdObj.crop });
 
             return await writeOutput(fileName, output, svg)
                 .then((res) => console.log(`✅  SVG optimized (${res})`))

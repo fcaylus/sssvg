@@ -1,6 +1,7 @@
 const SVGO = require('svgo');
+const autocrop = require('svg-autocrop');
 
-function optimizeSVG(filePath, svg) {
+function runSVGO(filePath, svg) {
     const svgo = new SVGO({
         multipass: true,
         plugins: [
@@ -36,6 +37,18 @@ function optimizeSVG(filePath, svg) {
     });
 
     return svgo.optimize(svg, { path: filePath }).then((result) => result.data);
+}
+
+async function optimizeSVG(filePath, svg, options) {
+    let result = await runSVGO(filePath, svg);
+
+    if (options.crop) {
+        result = (await autocrop(result)).result;
+        // Rerun svgo, just in case ^^
+        result = await runSVGO(filePath, result);
+    }
+
+    return result;
 }
 
 module.exports = {

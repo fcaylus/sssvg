@@ -1,6 +1,6 @@
 {
   "name": "sssvg",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Optimize SVGs and create Super Slim SVGs !",
   "main": "index.js",
   "bin": {
@@ -18,10 +18,12 @@
   "scripts": {
     "start": "node src/cli.js",
     "test-sample-file": "node src/cli.js sample/test-1.svg test-1.out.svg",
-    "test-sample-directory": "node src/cli.js -rd sample out"
+    "test-sample-directory": "node src/cli.js -rd sample out",
+    "test-sample-directory-crop": "node src/cli.js -crd sample out"
   },
   "dependencies": {
     "commander": "^6.2.0",
-    "svgo": "^1.3.2"
+    "svgo": "^1.3.2",
+    "svg-autocrop": "^2.0.36"
   }
 }
