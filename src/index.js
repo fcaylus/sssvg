@@ -1,9 +1,5 @@
-#!/usr/bin/env node
+const { optimizeSVG } = require('./optimize');
 
-const program = require('commander').program;
-const packageJson = require('../package.json');
-
-program.name(packageJson.name);
-program.version(packageJson.version);
-
-program.parse(process.argv);
+module.exports = {
+    optimizeSVG
+}

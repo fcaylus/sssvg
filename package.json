@@ -1,9 +1,10 @@
 {
   "name": "sssvg",
   "version": "0.0.1",
+  "description": "Optimize SVGs and create Super Slim SVGs !",
   "main": "index.js",
   "bin": {
-    "sssvg": "src/index.js"
+    "sssvg": "src/cli.js"
   },
   "license": "MIT",
   "homepage": "https://github.com/doky-fr/sssvg#readme",
@@ -15,7 +16,9 @@
     "access": "public"
   },
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/cli.js",
+    "test-sample-file": "node src/cli.js sample/test-1.svg test-1.out.svg",
+    "test-sample-directory": "node src/cli.js -rd sample out"
   },
   "dependencies": {
     "commander": "^6.2.0",
