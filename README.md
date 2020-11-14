@@ -21,6 +21,7 @@ Options:
   -V, --version    output the version number
   -d, --directory  Treat input as a directory and optimize all SVGs inside
   -r, --recursive  Explore input directory recursively. Requires -d or --directory
+  -c, --crop       Crop SVGs to its content, and change the view box accordingly
   -h, --help       display help for command
 ```
 
@@ -28,7 +29,7 @@ Options:
 ```javascript
 const { optimizeSVG } = require('sssvg');
 
-console.log(await optimizeSVG('test.svg', svgFileData));
+console.log(await optimizeSVG('test.svg', svgFileData, { crop: false }));
 ```
 
 ## Licence
