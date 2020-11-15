@@ -1,11 +1,12 @@
 {
   "name": "sssvg",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Optimize SVGs and create Super Slim SVGs !",
   "main": "index.js",
   "bin": {
     "sssvg": "src/cli.js"
   },
+  "typings": "src/index.d.ts",
   "license": "MIT",
   "homepage": "https://github.com/doky-fr/sssvg#readme",
   "repository": {
