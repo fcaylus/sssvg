@@ -11,7 +11,7 @@ export interface SSSVGOptions {
      * Should be 'default', 'transparent', a HTML color name or an hex string.
      * If not specified, default to 'default', which will detect white and transparent backgrounds.
      */
-    backgroundColor: 'default' | 'transparent' | string;
+    backgroundColor?: 'default' | 'transparent' | string;
     /**
      * If specified, will change the SVG viewBox to match the provided value.
      * If a value is omitted, the aspect ratio will be preserved, and the SVG will resize based on the other values.

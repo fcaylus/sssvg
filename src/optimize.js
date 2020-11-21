@@ -25,7 +25,7 @@ async function optimizeSVG(filePath, svg, options) {
     }
 
     if (opts.crop) {
-        result = await cropSvg(result, options.backgroundColor);
+        result = await cropSvg(result, opts.backgroundColor);
 
         if (process.env.SSSVG_DEBUG) {
             fs.writeFileSync('debug/3-after-crop.svg', result);
