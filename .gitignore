@@ -5,3 +5,4 @@ node_modules/
 *.out.svg
 out/
 yarn-error.log
+debug/

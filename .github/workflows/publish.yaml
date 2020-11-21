@@ -22,7 +22,11 @@ jobs:
         run: yarn install
 
       - name: Run sample command
-        run: yarn run test-sample-directory && yarn run test-sample-directory-crop
+        run: |
+          yarn run test-sample-file \
+            && yarn run test-sample-directory \
+            && yarn run test-sample-directory-crop \
+            && yarn run test-debug-output
 
       - name: Publish package to npm
         run: npm publish

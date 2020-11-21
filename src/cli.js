@@ -3,7 +3,8 @@
 const fs = require('fs');
 const program = require('commander').program;
 const packageJson = require('../package.json');
-const { optimizeSVG, parseViewBox } = require('./optimize');
+const { optimizeSVG } = require('./optimize');
+const { parseViewBox } = require('./svg-utils');
 const { writeOutput, displayErrors, listFilesInDir } = require('./utils');
 
 program.name(packageJson.name);
@@ -14,6 +15,7 @@ program
     .option('-d, --directory', 'Treat input as a directory and optimize all SVGs inside')
     .option('-r, --recursive', 'Explore input directory recursively. Requires -d or --directory')
     .option('-c, --crop', 'Crop SVGs to its content, and change the view box accordingly')
+    .option('-b, --background <background-color>', 'Background color. Used for cropping to content. Can be either "transparent", an HTML color name or a HEX string (starting with #)', 'default')
     .option('--view-box <viewBox>', 'Change the viewBox to match the one provided (and resize the SVG accordingly). Shorthand for --x, --y, --width and --height together')
     .option('--x <x>', 'Change the x value of the viewBox')
     .option('--y <y>', 'Change the y value of the viewBox')
@@ -38,6 +40,7 @@ program
             const fileData = fs.readFileSync(fileName, 'utf8');
             const svg = await optimizeSVG(fileName, fileData, {
                 crop: !!cmdObj.crop,
+                backgroundColor: cmdObj.background,
                 viewBox: hasViewBoxParam() ? {
                     x: cmdObj.x ? parseFloat(cmdObj.x) : undefined,
                     y: cmdObj.y ? parseFloat(cmdObj.y) : undefined,
@@ -59,7 +62,6 @@ program
 
         // Read each file in the input directory, and optimize the SVGs
         for (const file of listFilesInDir(input, !!cmdObj.recursive)) {
-            console.log(file)
             await handleFile(file);
         }
     });
