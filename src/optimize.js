@@ -34,19 +34,17 @@ async function optimizeSVG(filePath, svg, options) {
     if (opts.crop) {
         result = await cropSvg(result, opts.backgroundColor);
         writeDebugFile(result, 3, 'after-crop');
-
-        // Rerun svgo, just in case ^^
-        result = await runSVGO(filePath, result);
-        writeDebugFile(result, 4, 'after-svgo-again');
     }
 
     if (opts.viewBox) {
         result = await fixViewBox(result, opts.viewBox);
-        writeDebugFile(result, 5, 'after-viewbox');
+        writeDebugFile(result, 4, 'after-viewbox');
+    }
 
+    if (opts.crop || opts.viewBox) {
         // Rerun svgo, just in case ^^
         result = await runSVGO(filePath, result, 2);
-        writeDebugFile(result, 6, 'after-svgo-again-again');
+        writeDebugFile(result, 5, 'after-svgo-again');
     }
 
     return result;
