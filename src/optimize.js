@@ -25,7 +25,9 @@ async function optimizeSVG(filePath, svg, options) {
     }
     writeDebugFile(svg, 0, 'initial');
 
-    let result = await runSVGO(filePath, svg);
+    // First remove off viewbox path, and then merge paths (on the second call)
+    let result = await runSVGO(filePath, svg, 3, true);
+    result = await runSVGO(filePath, result, 3, false);
     writeDebugFile(result, 1, 'after-svgo');
     if (await isSvgEmpty(result)) {
         return result;
