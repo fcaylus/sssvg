@@ -4,11 +4,12 @@ const path = require('path');
 /**
  * Detect if output is an SVG file or not, and write the svg data
  * (if it's not a svg file, consider it's a directory)
+ * @param inputDir The input directory of the SVG file
  * @param input The input SVG file name
  * @param output The output file or directory
  * @param svg The svg data
  */
-function writeOutput(input, output, svg) {
+function writeOutput(inputDir, input, output, svg) {
     const writeFile = (path, data) => new Promise(((resolve, reject) => {
         fs.writeFile(path, data, { encoding: 'utf8' }, (error) => {
             if (error) {
@@ -19,27 +20,39 @@ function writeOutput(input, output, svg) {
         });
     }));
 
+    // If it's not a directory, write the file directly
     if (output.endsWith('.svg')) {
         return writeFile(output, svg);
     }
 
-    const inputFile = path.basename(input);
+    let inputFileName = path.basename(input);
+    if (!inputDir.endsWith('/')) {
+        inputDir += '/';
+    }
+    inputDir = path.normalize(inputDir);
 
-    if (fs.existsSync(output)) {
-        if (fs.statSync(output).isDirectory()) {
-            return writeFile(path.join(output, inputFile), svg);
+    if (path.normalize(input).startsWith(inputDir)) {
+        inputFileName = input.replace(inputDir, '');
+    }
+
+    const outputFile = path.join(output, inputFileName);
+    const outputDir = path.dirname(outputFile);
+
+    if (fs.existsSync(outputDir)) {
+        if (fs.statSync(outputDir).isDirectory()) {
+            return writeFile(outputFile, svg);
         } else {
-            return Promise.reject(`Output directory is not a directory: ${output}`);
+            return Promise.reject(`Output directory is not a directory: ${outputDir}`);
         }
     }
 
     // Create directory
     return new Promise(async (resolve, reject) => {
-        fs.mkdir(output, { recursive: true }, (error) => {
+        fs.mkdir(outputDir, { recursive: true }, (error) => {
             if (!error) {
-                writeFile(path.join(output, inputFile), svg).then(resolve).catch(reject);
+                writeFile(outputFile, svg).then(resolve).catch(reject);
             } else {
-                reject(`Could not create directory ${output}: ${error.code} ${error.message}`);
+                reject(`Could not create directory ${outputDir}: ${error.code} ${error.message}`);
             }
         });
     });

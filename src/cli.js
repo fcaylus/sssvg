@@ -26,7 +26,7 @@ program
         output: 'Output SVG file or directory (if it doesn\'t match *.svg)'
     })
     .action(async (input, output, cmdObj) => {
-        const handleFile = async (fileName) => {
+        const handleFile = async (inputDir, fileName) => {
             const hasViewBoxParam = () => {
                 return cmdObj.x !== undefined
                     || cmdObj.y !== undefined
@@ -50,19 +50,19 @@ program
                 } : undefined
             }).catch(displayErrors);
 
-            return await writeOutput(fileName, output, svg)
+            return await writeOutput(inputDir, fileName, output, svg)
                 .then((res) => console.log(`✅  SVG optimized (${res})`))
                 .catch(displayErrors);
         };
 
         if (!cmdObj.directory) {
-            await handleFile(input);
+            await handleFile('', input);
             return;
         }
 
         // Read each file in the input directory, and optimize the SVGs
         for (const file of listFilesInDir(input, !!cmdObj.recursive)) {
-            await handleFile(file);
+            await handleFile(input, file);
         }
     });
 
