@@ -22,7 +22,7 @@
     "test-sample-directory": "node src/cli.js -rd sample out",
     "test-sample-directory-crop": "node src/cli.js -crd sample out",
     "test-sample-directory-crop-resize": "node src/cli.js -crd --x 0 --y 0 --height 1000 sample out",
-    "test-debug-output": "SSSVG_DEBUG=1 node src/cli.js -c --x 0 --y 0 --height 1000 sample/test-3.svg test-3.out.svg"
+    "test-debug-output": "SSSVG_DEBUG=1 node src/cli.js -c --x 0 --y 0 --height 1000 sample/test-4.svg test-4.out.svg"
   },
   "dependencies": {
     "color-convert": "^2.0.1",

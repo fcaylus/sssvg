@@ -1,7 +1,14 @@
 const { runSVGO } = require('./steps/svgo');
 const { fixViewBox } = require('./steps/viewbox');
 const { cropSvg } = require('./steps/crop');
+const { isSvgEmpty } = require('./svg-utils');
 const fs = require('fs');
+
+function writeDebugFile(data, step, text) {
+    if (process.env.SSSVG_DEBUG) {
+        fs.writeFileSync(`debug/${step}-${text}.svg`, data);
+    }
+}
 
 async function optimizeSVG(filePath, svg, options) {
     const opts = {
@@ -15,43 +22,31 @@ async function optimizeSVG(filePath, svg, options) {
         if (!fs.existsSync('debug/')) {
             fs.mkdirSync('debug/');
         }
-        fs.writeFileSync('debug/0-initial.svg', svg);
     }
+    writeDebugFile(svg, 0, 'initial');
 
     let result = await runSVGO(filePath, svg);
-
-    if (process.env.SSSVG_DEBUG) {
-        fs.writeFileSync('debug/1-after-svgo.svg', result);
+    writeDebugFile(result, 1, 'after-svgo');
+    if (await isSvgEmpty(result)) {
+        return result;
     }
 
     if (opts.crop) {
         result = await cropSvg(result, opts.backgroundColor);
-
-        if (process.env.SSSVG_DEBUG) {
-            fs.writeFileSync('debug/3-after-crop.svg', result);
-        }
+        writeDebugFile(result, 3, 'after-crop');
 
         // Rerun svgo, just in case ^^
         result = await runSVGO(filePath, result);
-
-        if (process.env.SSSVG_DEBUG) {
-            fs.writeFileSync('debug/4-after-svgo-again.svg', result);
-        }
+        writeDebugFile(result, 4, 'after-svgo-again');
     }
 
     if (opts.viewBox) {
         result = await fixViewBox(result, opts.viewBox);
-
-        if (process.env.SSSVG_DEBUG) {
-            fs.writeFileSync('debug/5-after-viewbox.svg', result);
-        }
+        writeDebugFile(result, 5, 'after-viewbox');
 
         // Rerun svgo, just in case ^^
         result = await runSVGO(filePath, result, 2);
-
-        if (process.env.SSSVG_DEBUG) {
-            fs.writeFileSync('debug/6-after-svgo-again-again.svg', result);
-        }
+        writeDebugFile(result, 6, 'after-svgo-again-again');
     }
 
     return result;
