@@ -1,76 +1,86 @@
-const SVGO = require('svgo');
+const { optimize, extendDefaultPlugins } = require('svgo');
 
 function svgConfig(floatPrecision, removeOutsideViewBoxPath) {
     return {
         multipass: true,
         floatPrecision,
-        plugins: [
+        plugins: extendDefaultPlugins([
             {
-                removeViewBox: false
+                name: 'removeViewBox',
+                active: false
             },
             {
-                removeUnknownsAndDefaults: {
+                name: 'removeUnknownsAndDefaults',
+                params: {
                     keepDataAttrs: false,
                     keepAriaAttrs: false
                 }
             },
             {
-                convertPathData: {
+                name: 'convertPathData',
+                params: {
                     forceAbsolutePath: true
                 }
             },
             {
-                convertShapeToPath: {
+                name: 'convertStyleToAttrs'
+            },
+            {
+                name: 'convertShapeToPath',
+                params: {
                     convertArcs: true
                 }
             },
             {
-                removeScriptElement: true
+                name: 'removeScriptElement'
             },
             {
-                removeStyleElement: true
+                name: 'removeStyleElement'
             },
             {
-                removeDimensions: true
+                name: 'removeDimensions'
             },
             // As described here: https://medium.com/@marklynch_99372/removing-off-screen-content-in-svg-images-at-scale-d8a2babde196
             // `mergePaths` should be disabled if `removeOffCanvasPaths` is enabled
             ...(removeOutsideViewBoxPath ? [
                 {
-                    mergePaths: false
+                    name: 'mergePaths',
+                    active: false
                 },
                 {
-                    removeOffCanvasPaths: true
+                    name: 'removeOffCanvasPaths'
                 }
             ] : [
                 {
-                    mergePaths: true
+                    name: 'mergePaths'
                 },
                 {
-                    removeOffCanvasPaths: false
+                    name: 'removeOffCanvasPaths',
+                    active: false
                 }
             ]),
             {
-                customRemoveRasterImages: {
-                    type: 'perItem',
-                    description: 'Improvement of removeRasterImages plugin. Also checks fro xlink:href attributes, and data with data:img/ mime type',
-                    fn: function(item) {
-                        const rasterImageHrefMatcher = /(\.|image\/|img\/)(jpg|jpeg|png|gif)/;
-                        if (item.isElem('image')
-                            && (item.hasAttrLocal('href', rasterImageHrefMatcher)
-                                || item.hasAttrLocal('xlink:href', rasterImageHrefMatcher))) {
-                            return false;
-                        }
+                name: 'customRemoveRasterImages',
+                type: 'perItem',
+                description: 'Improvement of removeRasterImages plugin. Also checks fro xlink:href attributes, and data with data:img/ mime type',
+                fn: function(item) {
+                    const rasterImageHrefMatcher = /(\.|image\/|img\/)(jpg|jpeg|png|gif)/;
+                    if (item.isElem('image')
+                        && (item.hasAttrLocal('href', rasterImageHrefMatcher)
+                            || item.hasAttrLocal('xlink:href', rasterImageHrefMatcher))) {
+                        return false;
                     }
                 }
             }
-        ]
+        ])
     };
 }
 
 function runSVGO(filePath, svg, floatPrecision = 3, removeOutsideViewBoxPath = false) {
-    const svgo = new SVGO(svgConfig(floatPrecision, removeOutsideViewBoxPath));
-    return svgo.optimize(svg, { path: filePath }).then((result) => result.data);
+    return optimize(svg, {
+        path: filePath,
+        ...svgConfig(floatPrecision, removeOutsideViewBoxPath)
+    }).data;
 }
 
 module.exports = {
