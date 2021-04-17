@@ -2,7 +2,7 @@ const svgson = require('svgson');
 const svgPathParser = require('svg-path-parser');
 const { parseViewBox, pathToString } = require('../svg-utils');
 
-async function fixViewBox(svg, newViewBox) {
+function fixViewBox(svg, newViewBox) {
     let oldViewBox;
 
     // fix a value based on its axis
@@ -20,7 +20,7 @@ async function fixViewBox(svg, newViewBox) {
     };
 
     // Convert to JSON AST
-    const svgJSON = await svgson.parse(svg);
+    const svgJSON = svgson.parseSync(svg);
     oldViewBox = parseViewBox(svgJSON.attributes.viewBox);
 
     // Merge values from the old view box, if not specified in the new one

@@ -53,9 +53,8 @@ function parseViewBox(viewBoxStr) {
     };
 }
 
-async function isSvgEmpty(svg) {
-    const svgJSON = await svgson.parse(svg);
-    return svgJSON.children.length === 0;
+function isSvgEmpty(svg) {
+    return svgson.parseSync(svg).children.length === 0;
 }
 
 module.exports = {

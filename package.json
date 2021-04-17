@@ -31,6 +31,6 @@
     "svg-path-parser": "^1.1.0",
     "svg2img": "^0.9.0",
     "svgo": "^2.3.0",
-    "svgson": "^4.1.0"
+    "svgson": "^5.2.1"
   }
 }

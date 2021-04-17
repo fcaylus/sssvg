@@ -90,7 +90,7 @@ function getContentBoundingBox(png, bgColor) {
 }
 
 async function cropSvg(svg, backgroundColor) {
-    const originalSvgJson = await svgson.parse(svg);
+    const originalSvgJson = svgson.parseSync(svg);
     const viewBox = parseViewBox(originalSvgJson.attributes.viewBox);
 
     const width = viewBox.width;
@@ -103,7 +103,7 @@ async function cropSvg(svg, backgroundColor) {
     }
 
     if (ratio > 1) {
-        svg = await fixViewBox(svg, {
+        svg = fixViewBox(svg, {
             x: viewBox.x,
             y: viewBox.y,
             width: width * ratio,
