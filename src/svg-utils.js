@@ -6,26 +6,27 @@ const svgson = require('svgson');
  */
 function pathToString(d) {
     return d.map((command) => {
-        if (command.command === 'moveto') {
-            return `M ${command.x} ${command.y}`;
-        } else if (command.command === 'lineto') {
-            return `L ${command.x} ${command.y}`;
-        } else if (command.command === 'horizontal lineto') {
-            return `H ${command.x}`;
-        } else if (command.command === 'vertical lineto') {
-            return `V ${command.y}`;
-        } else if (command.command === 'curveto') {
-            return `C ${command.x1} ${command.y1} ${command.x2} ${command.y2} ${command.x} ${command.y}`;
-        } else if (command.command === 'smooth curveto') {
-            return `S ${command.x2} ${command.y2} ${command.x} ${command.y}`;
-        } else if (command.command === 'quadratic curveto') {
-            return `Q ${command.x1} ${command.y1} ${command.x} ${command.y}`;
-        } else if (command.command === 'smooth quadratic curveto') {
-            return `T ${command.x} ${command.y}`;
-        } else if (command.command === 'elliptical arc') {
-            return `A ${command.rx} ${command.ry} ${command.xAxisRotation} ${command.largeArc ? 1 : 0} ${command.sweep ? 1 : 0} ${command.x} ${command.y}`;
-        } else if (command.command === 'closepath') {
-            return 'Z';
+        switch (command.command) {
+            case 'moveto':
+                return `M ${command.x} ${command.y}`;
+            case 'lineto':
+                return `L ${command.x} ${command.y}`;
+            case 'horizontal lineto':
+                return `H ${command.x}`;
+            case 'vertical lineto':
+                return `V ${command.y}`;
+            case 'curveto':
+                return `C ${command.x1} ${command.y1} ${command.x2} ${command.y2} ${command.x} ${command.y}`;
+            case 'smooth curveto':
+                return `S ${command.x2} ${command.y2} ${command.x} ${command.y}`;
+            case 'quadratic curveto':
+                return `Q ${command.x1} ${command.y1} ${command.x} ${command.y}`;
+            case 'smooth quadratic curveto':
+                return `T ${command.x} ${command.y}`;
+            case 'elliptical arc':
+                return `A ${command.rx} ${command.ry} ${command.xAxisRotation} ${command.largeArc ? 1 : 0} ${command.sweep ? 1 : 0} ${command.x} ${command.y}`;
+            case 'closepath':
+                return 'Z';
         }
         return '';
     }).join(' ');

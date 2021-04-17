@@ -51,34 +51,34 @@ async function fixViewBox(svg, newViewBox) {
                 let d = svgPathParser.parseSVG(ast.attributes.d, {});
                 svgPathParser.makeAbsolute(d);
 
-                // Fix path data based on the new viewBbox
+                // Fix path data based on the new viewBox
                 for (let i = 0; i < d.length; i++) {
                     d[i].x0 = fix(d[i].x0, 'x');
                     d[i].y0 = fix(d[i].y0, 'y');
                     d[i].x = fix(d[i].x, 'x');
                     d[i].y = fix(d[i].y, 'y');
 
-                    if (d[i].command === 'moveto'
-                        || d[i].command === 'lineto'
-                        || d[i].command === 'horizontal lineto'
-                        || d[i].command === 'vertical lineto'
-                        || d[i].command === 'closepath'
-                        || d[i].command === 'smooth quadratic curveto') {
-                        // Only have x0, y0, x, y
-                    } else if (d[i].command === 'curveto') {
-                        d[i].x1 = fix(d[i].x1, 'x');
-                        d[i].y1 = fix(d[i].y1, 'y');
-                        d[i].x2 = fix(d[i].x2, 'x');
-                        d[i].y2 = fix(d[i].y2, 'y');
-                    } else if (d[i].command === 'smooth curveto') {
-                        d[i].x2 = fix(d[i].x2, 'x');
-                        d[i].y2 = fix(d[i].y2, 'y');
-                    } else if (d[i].command === 'quadratic curveto') {
-                        d[i].x1 = fix(d[i].x1, 'x');
-                        d[i].y1 = fix(d[i].y1, 'y');
-                    } else if (d[i].command === 'elliptical arc') {
-                        d[i].rx = fixLength(d[i].rx, 'x');
-                        d[i].ry = fixLength(d[i].ry, 'y');
+                    // 'moveto', 'lineto', 'horizontal lineto', 'vertical lineto', 'closepath'
+                    // and 'smooth quadratic curveto' only have x0, y0, x, y
+                    switch (d[i].command) {
+                        case 'curveto':
+                            d[i].x1 = fix(d[i].x1, 'x');
+                            d[i].y1 = fix(d[i].y1, 'y');
+                            d[i].x2 = fix(d[i].x2, 'x');
+                            d[i].y2 = fix(d[i].y2, 'y');
+                            break;
+                        case 'smooth curveto':
+                            d[i].x2 = fix(d[i].x2, 'x');
+                            d[i].y2 = fix(d[i].y2, 'y');
+                            break;
+                        case 'quadratic curveto':
+                            d[i].x1 = fix(d[i].x1, 'x');
+                            d[i].y1 = fix(d[i].y1, 'y');
+                            break;
+                        case 'elliptical arc':
+                            d[i].rx = fixLength(d[i].rx, 'x');
+                            d[i].ry = fixLength(d[i].ry, 'y');
+                            break;
                     }
                 }
 

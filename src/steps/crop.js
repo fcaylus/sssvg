@@ -18,28 +18,27 @@ function isBackground(r, g, b, a, bgColor) {
     return r === color[0] && g === color[1] && b === color[2];
 }
 
+function isPixelBackground(png, x, y, bgColor) {
+    const idx = (png.width * y + x) << 2;
+    return isBackground(png.data[idx], png.data[idx + 1], png.data[idx + 2], png.data[idx + 3], bgColor);
+}
+
 function isRowOnlyBackground(png, y, bgColor) {
-    let rowIsOnlyBackground = true;
     for (let x = 0; x < png.width; x++) {
-        const idx = (png.width * y + x) << 2;
-        if (!isBackground(png.data[idx], png.data[idx + 1], png.data[idx + 2], png.data[idx + 3], bgColor)) {
-            rowIsOnlyBackground = false;
-            break;
+        if (!isPixelBackground(png, x, y, bgColor)) {
+            return false;
         }
     }
-    return rowIsOnlyBackground;
+    return true;
 }
 
 function isColumnOnlyBackground(png, x, bgColor) {
-    let columnIsOnlyBackground = true;
     for (let y = 0; y < png.height; y++) {
-        const idx = (png.width * y + x) << 2;
-        if (!isBackground(png.data[idx], png.data[idx + 1], png.data[idx + 2], png.data[idx + 3], bgColor)) {
-            columnIsOnlyBackground = false;
-            break;
+        if (!isPixelBackground(png, x, y, bgColor)) {
+            return false;
         }
     }
-    return columnIsOnlyBackground;
+    return true;
 }
 
 function getContentBoundingBox(png, bgColor) {
@@ -52,38 +51,34 @@ function getContentBoundingBox(png, bgColor) {
 
     // Find top border
     for (let y = 0; y < png.height; y++) {
-        if (isRowOnlyBackground(png, y, bgColor) && bb.y1 === y) {
-            bb.y1 += 1;
-        } else {
+        if (!isRowOnlyBackground(png, y, bgColor)) {
             break;
         }
+        bb.y1 += 1;
     }
 
     // Find bottom border
     for (let y = png.height - 1; y >= 0; y--) {
-        if (isRowOnlyBackground(png, y, bgColor) && bb.y2 === y) {
-            bb.y2 -= 1;
-        } else {
+        if (!isRowOnlyBackground(png, y, bgColor)) {
             break;
         }
+        bb.y2 -= 1;
     }
 
     // Find left border
     for (let x = 0; x < png.width; x++) {
-        if (isColumnOnlyBackground(png, x, bgColor) && bb.x1 === x) {
-            bb.x1 += 1;
-        } else {
+        if (!isColumnOnlyBackground(png, x, bgColor)) {
             break;
         }
+        bb.x1 += 1;
     }
 
     // Find right border
     for (let x = png.width - 1; x >= 0; x--) {
-        if (isColumnOnlyBackground(png, x, bgColor) && bb.x2 === x) {
-            bb.x2 -= 1;
-        } else {
+        if (!isColumnOnlyBackground(png, x, bgColor)) {
             break;
         }
+        bb.x2 -= 1;
     }
 
     return {
@@ -116,7 +111,7 @@ async function cropSvg(svg, backgroundColor) {
         });
     }
 
-    const pngRawData = await (new Promise(((resolve) => {
+    const pngRawData = await (new Promise((resolve) => {
         svg2img(svg, {
             preserveAspectRatio: true,
             height: height * ratio,
@@ -127,7 +122,7 @@ async function cropSvg(svg, backgroundColor) {
             }
             resolve(buffer);
         });
-    })));
+    }));
 
     if (process.env.SSSVG_DEBUG) {
         fs.writeFileSync('debug/2-convert-to-png.png', pngRawData);

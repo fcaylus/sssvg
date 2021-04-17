@@ -53,7 +53,7 @@ function svgConfig(floatPrecision, removeOutsideViewBoxPath) {
             {
                 customRemoveRasterImages: {
                     type: 'perItem',
-                    description: 'Improvement of removeRasterImages plugin. Also checks fro xlink:href attributes, and date with data:img/ mime type',
+                    description: 'Improvement of removeRasterImages plugin. Also checks fro xlink:href attributes, and data with data:img/ mime type',
                     fn: function(item) {
                         const rasterImageHrefMatcher = /(\.|image\/|img\/)(jpg|jpeg|png|gif)/;
                         if (item.isElem('image')
