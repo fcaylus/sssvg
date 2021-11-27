@@ -1,64 +1,38 @@
-const { optimize, extendDefaultPlugins } = require('svgo');
+const { optimize } = require('svgo');
 
 function svgConfig(floatPrecision, removeOutsideViewBoxPath) {
     return {
         multipass: true,
         floatPrecision,
-        plugins: extendDefaultPlugins([
+        plugins: [
             {
-                name: 'removeViewBox',
-                active: false
-            },
-            {
-                name: 'removeUnknownsAndDefaults',
+                name: 'preset-default',
                 params: {
-                    keepDataAttrs: false,
-                    keepAriaAttrs: false
+                    overrides: {
+                        removeViewBox: false,
+                        removeUnknownsAndDefaults: {
+                            keepDataAttrs: false,
+                            keepAriaAttrs: false
+                        },
+                        convertPathData: {
+                            forceAbsolutePath: true
+                        },
+                        convertShapeToPath: {
+                            convertArcs: true
+                        },
+                        // As described here: https://medium.com/@marklynch_99372/removing-off-screen-content-in-svg-images-at-scale-d8a2babde196
+                        // `mergePaths` should be disabled if `removeOffCanvasPaths` is enabled
+                        ...(removeOutsideViewBoxPath ? {
+                            mergePaths: false
+                        } : {})
+                    }
                 }
             },
-            {
-                name: 'convertPathData',
-                params: {
-                    forceAbsolutePath: true
-                }
-            },
-            {
-                name: 'convertStyleToAttrs'
-            },
-            {
-                name: 'convertShapeToPath',
-                params: {
-                    convertArcs: true
-                }
-            },
-            {
-                name: 'removeScriptElement'
-            },
-            {
-                name: 'removeStyleElement'
-            },
-            {
-                name: 'removeDimensions'
-            },
-            // As described here: https://medium.com/@marklynch_99372/removing-off-screen-content-in-svg-images-at-scale-d8a2babde196
-            // `mergePaths` should be disabled if `removeOffCanvasPaths` is enabled
-            ...(removeOutsideViewBoxPath ? [
-                {
-                    name: 'mergePaths',
-                    active: false
-                },
-                {
-                    name: 'removeOffCanvasPaths'
-                }
-            ] : [
-                {
-                    name: 'mergePaths'
-                },
-                {
-                    name: 'removeOffCanvasPaths',
-                    active: false
-                }
-            ]),
+            'convertStyleToAttrs',
+            'removeScriptElement',
+            'removeStyleElement',
+            'removeDimensions',
+            ...(removeOutsideViewBoxPath ? ['removeOffCanvasPaths'] : []),
             {
                 name: 'customRemoveRasterImages',
                 type: 'perItem',
@@ -72,7 +46,7 @@ function svgConfig(floatPrecision, removeOutsideViewBoxPath) {
                     }
                 }
             }
-        ])
+        ]
     };
 }
 
