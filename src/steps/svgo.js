@@ -20,6 +20,11 @@ function svgConfig(floatPrecision, removeOutsideViewBoxPath) {
                         convertShapeToPath: {
                             convertArcs: true
                         },
+                        cleanupIDs: {
+                            // Force remove of ids on elements with `script` or `style` attr
+                            force: true
+                        },
+                        moveElemsAttrsToGroup: false,
                         // As described here: https://medium.com/@marklynch_99372/removing-off-screen-content-in-svg-images-at-scale-d8a2babde196
                         // `mergePaths` should be disabled if `removeOffCanvasPaths` is enabled
                         ...(removeOutsideViewBoxPath ? {
