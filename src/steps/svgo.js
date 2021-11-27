@@ -50,6 +50,43 @@ function svgConfig(floatPrecision, removeOutsideViewBoxPath) {
                         return false;
                     }
                 }
+            },
+            {
+                name: 'removeText',
+                type: 'perItem',
+                description: 'Remove all text elements',
+                fn: function(item) {
+                    return !item.isElem('text')
+                        && !item.isElem('textPath')
+                        && !item.isElem('tref')
+                        && !item.isElem('tspan')
+                        && !item.isElem('altGlyph')
+                        && !item.isElem('altGlyphDef')
+                        && !item.isElem('altGlyphItem')
+                        && !item.isElem('glyph')
+                        && !item.isElem('glyphRef')
+                        && !item.isElem('font')
+                        && !item.isElem('font-face')
+                        && !item.isElem('font-face-format')
+                        && !item.isElem('font-face-name')
+                        && !item.isElem('font-face-src')
+                        && !item.isElem('font-face-uri')
+                        && !item.isElem('hkern')
+                        && !item.isElem('vkern');
+                }
+            },
+            {
+                name: 'removeAnimation',
+                type: 'perItem',
+                description: 'Remove all animation elements',
+                fn: function(item) {
+                    return !item.isElem('animate')
+                        && !item.isElem('animateMotion')
+                        && !item.isElem('animateTransform')
+                        && !item.isElem('animateColor')
+                        && !item.isElem('discard')
+                        && !item.isElem('set');
+                }
             }
         ]
     };

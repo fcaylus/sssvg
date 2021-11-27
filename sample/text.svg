@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="0 0 200 100">
+    <text x="50" y="60"
+          font-family="Verdana"
+          font-size="20">
+        Hello there!
+    </text>
+</svg>
