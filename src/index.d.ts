@@ -31,3 +31,38 @@ export interface SSSVGOptions {
  * @param options Options
  */
 export function optimizeSVG(filePath: string, svg: string, options?: SSSVGOptions): Promise<string>;
+
+/**
+ * Analysis results returned by the analyzeSVG() function
+ */
+export interface SvgAnalysis {
+    /**
+     * List of colors found in the SVG
+     */
+    colors: string[];
+    /**
+     * Parsed view box
+     */
+    viewBox: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        /** Ratio of width/height */
+        ratio: number;
+    };
+    /**
+     * True if the SVG contains raster images (<image> or <img> elements)
+     */
+    containsRasterImage: boolean;
+    /**
+     * True if the SVG contains raw text (<text> element)
+     */
+    containsText: boolean;
+}
+
+/**
+ * Analyze a SVG string and returns information about its size and features
+ * @param svg The SVG content (as string)
+ */
+export function analyzeSVG(svg: string): SvgAnalysis;

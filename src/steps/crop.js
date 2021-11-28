@@ -4,7 +4,7 @@ const { fixViewBox } = require('./viewbox');
 const fs = require('fs');
 const PNG = require('pngjs').PNG;
 const svgson = require('svgson');
-const colorConvert = require('color-convert');
+const chroma = require('chroma-js');
 
 function isBackground(r, g, b, a, bgColor) {
     if (bgColor === 'default') {
@@ -14,7 +14,7 @@ function isBackground(r, g, b, a, bgColor) {
         return a === 0;
     }
 
-    const color = bgColor.startsWith('#') ? colorConvert.hex.rgb(bgColor.substring(1)) : colorConvert.keyword.rgb(bgColor);
+    const color = chroma(bgColor).rgb();
     return r === color[0] && g === color[1] && b === color[2];
 }
 

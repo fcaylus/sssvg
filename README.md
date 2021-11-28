@@ -9,6 +9,7 @@ Applies 10 passes of SVGO (with aggressive parameters), crop the svg to its cont
 - Optimize SVGs
 - Crop the SVG to its content
 - Resize the viewBox (with the same aspect ratio, or not, as you want !)
+- Analyze the SVG for raster images, text, colors, ...
 
 ## How to use it ?
 
@@ -33,16 +34,17 @@ Options:
   --y <y>                              Change the y value of the viewBox
   --width <width>                      Change the width value of the viewBox
   --height <height>                    Change the height value of the viewBox
+  -a, --analyze                        Display analysis information about the SVG
   -h, --help                           display help for command
 ```
 
 - Node.js
 ```javascript
 const fs = require('fs');
-const { optimizeSVG } = require('sssvg');
+const { optimizeSVG, analyzeSVG } = require('sssvg');
 
 const svgFileData = fs.readFileSync('test.svg', 'utf8');
-console.log(await optimizeSVG('test.svg', svgFileData, { 
+const optimizedSvg = await optimizeSVG('test.svg', svgFileData, { 
     crop: true,
     backgroundColor: 'black',
     viewBox: {
@@ -52,7 +54,11 @@ console.log(await optimizeSVG('test.svg', svgFileData, {
         // Will preserve aspect ratio
         width: undefined
     }
-}));
+});
+const analysis = analyzeSVG(svgFileData);
+
+console.log(`Analysis: ${analysis}`);
+console.log(`Optimized SVG: ${optimizedSvg}`);
 ```
 
 ## How it works ?

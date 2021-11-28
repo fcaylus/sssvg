@@ -18,14 +18,14 @@
   },
   "scripts": {
     "start": "node src/cli.js",
-    "test-sample-file": "node src/cli.js sample/test-1.svg test-1.out.svg",
-    "test-sample-directory": "node src/cli.js -rd sample out",
-    "test-sample-directory-crop": "node src/cli.js -crd sample out",
-    "test-sample-directory-crop-resize": "node src/cli.js -crd --x 0 --y 0 --height 1000 sample out",
-    "test-debug-output": "SSSVG_DEBUG=1 node src/cli.js -c --x 0 --y 0 --height 1000 sample/test-3.svg test-3.out.svg"
+    "test-sample-file": "node src/cli.js -a sample/test-1.svg test-1.out.svg",
+    "test-sample-directory": "node src/cli.js -ard sample out",
+    "test-sample-directory-crop": "node src/cli.js -acrd sample out",
+    "test-sample-directory-crop-resize": "node src/cli.js -acrd --x 0 --y 0 --height 1000 sample out",
+    "test-debug-output": "SSSVG_DEBUG=1 node src/cli.js -a -c --x 0 --y 0 --height 1000 sample/test-3.svg test-3.out.svg"
   },
   "dependencies": {
-    "color-convert": "^2.0.1",
+    "chroma-js": "^2.1.2",
     "commander": "^6.2.1",
     "pngjs": "^6.0.0",
     "svg-path-parser": "^1.1.0",

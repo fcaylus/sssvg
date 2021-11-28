@@ -4,6 +4,7 @@ const fs = require('fs');
 const program = require('commander').program;
 const packageJson = require('../package.json');
 const { optimizeSVG } = require('./optimize');
+const { analyzeSVG } = require('./analyze');
 const { parseViewBox } = require('./svg-utils');
 const { writeOutput, displayErrors, listFilesInDir } = require('./utils');
 
@@ -21,6 +22,7 @@ program
     .option('--y <y>', 'Change the y value of the viewBox')
     .option('--width <width>', 'Change the width value of the viewBox')
     .option('--height <height>', 'Change the height value of the viewBox')
+    .option('-a, --analyze', 'Display analysis information about the SVG')
     .description(packageJson.description, {
         input: 'Input SVG file',
         output: 'Output SVG file or directory (if it doesn\'t match *.svg)'
@@ -38,6 +40,16 @@ program
             console.log(`🔵  Optimize SVG ${fileName}`);
 
             const fileData = fs.readFileSync(fileName, 'utf8');
+
+            if (cmdObj.analyze) {
+                const analysis = analyzeSVG(fileData);
+                console.log('  ⚪️  Analysis');
+                console.log(`      - Colors: ${analysis.colors.join(' | ')}`);
+                console.log(`      - View box: (x: ${analysis.viewBox.x}, y: ${analysis.viewBox.y}, w: ${analysis.viewBox.width}, h: ${analysis.viewBox.height}, ratio: ${analysis.viewBox.ratio})`);
+                console.log(`      - Raster images: ${analysis.containsRasterImage ? '✅' : '❌'}  `);
+                console.log(`      - Text: ${analysis.containsText ? '✅' : '❌'}  `);
+            }
+
             const svg = await optimizeSVG(fileName, fileData, {
                 crop: !!cmdObj.crop,
                 backgroundColor: cmdObj.background,
