@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "chroma-js": "^2.1.2",
-    "commander": "^6.2.1",
+    "commander": "^8.3.0",
     "pngjs": "^6.0.0",
     "svg-path-parser": "^1.1.0",
     "svg2img": "^0.9.4",
