@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" xml:space="preserve">
+    <style type="text/css">
+        .hide{
+            fill:none;
+        }
+    </style>
+    <rect class="hide" width="10" height="10"/>
+    <rect x="10" y="10" width="10" height="10" fill="red"/>
+</svg>

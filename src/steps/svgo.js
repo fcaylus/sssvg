@@ -87,6 +87,16 @@ function svgConfig(floatPrecision, removeOutsideViewBoxPath) {
                         && !item.isElem('discard')
                         && !item.isElem('set');
                 }
+            },
+            {
+                name: 'removeFillNonePaths',
+                type: 'perItem',
+                description: 'Remove every path that has fill="none" attribute',
+                fn: function(item) {
+                    if (item.isElem('path') && item.hasAttr('fill', 'none')) {
+                        return false;
+                    }
+                }
             }
         ]
     };
