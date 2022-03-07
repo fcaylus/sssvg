@@ -5,6 +5,8 @@ Optimize SVGs and create Super Slim SVGs ! (based on [svgo](https://github.com/s
 
 Applies 10 passes of SVGO (with aggressive parameters), crop the svg to its content, and resize the viewBox as you want !
 
+> Not optimized for speed at all, make take a whole second to process 🐌
+
 ## Features
 - Optimize SVGs
 - Crop the SVG to its content
